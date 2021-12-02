@@ -86,4 +86,43 @@ class AlgorithmTest {
         
         assertEquals(gcd, 2);
     }
+
+    @Test
+    void selectionSort() {
+        int[] arr = { 3, 1, 2, 6, 4, 3 };
+
+        long st = System.currentTimeMillis();
+        int[] result = Algorithm.selectionSort(arr, 6);
+        long et = System.currentTimeMillis();
+
+        System.out.println("선택정렬 속도 측정: " + (et - st) + " ms");
+        
+        assertArrayEquals(result, new int[]{ 1, 2, 3, 3, 4, 6 });
+    }
+    
+    @Test
+    void bubbleSort() {
+        int[] arr = { 3, 1, 2, 6, 4, 3 };
+
+        long st = System.currentTimeMillis();
+        int[] result = Algorithm.bubbleSort(arr, 6);
+        long et = System.currentTimeMillis();
+
+        System.out.println("버블정렬 속도 측정: " + (et - st) + " ms");
+
+        assertArrayEquals(result, new int[]{ 1, 2, 3, 3, 4, 6 });
+    }
+    
+    @Test
+    void quickSort() {
+        int[] arr = { 3, 1, 2, 6, 4, 3 };
+
+        long st = System.currentTimeMillis();
+        int[] result = Algorithm.quickSort(arr, 0, 6);
+        long et = System.currentTimeMillis();
+
+        System.out.println("퀵정렬 속도 측정: " + (et - st) + " ms");
+
+        assertArrayEquals(result, new int[]{ 1, 2, 3, 3, 4, 6 });
+    }
 }
