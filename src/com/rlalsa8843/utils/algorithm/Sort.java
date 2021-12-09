@@ -2,6 +2,8 @@ package com.rlalsa8843.utils.algorithm;
 
 import com.rlalsa8843.utils.CommonUtils;
 
+import java.util.Arrays;
+
 public class Sort {
     private final static int[] gap =
             { 1, 4, 10, 23, 57, 132, 301, 701, 1750, 3937, 8858, 19930, 44842, 100894, 227011, 510774, 1149241,
@@ -281,6 +283,40 @@ public class Sort {
             } else return;
         }
 
+    }
+
+    /**
+     * <p>계수 정렬(Counting Sort)
+     *
+     * <p>데이터 값의 개수만큼 차례대로 정렬
+     * <p>메모리를 최대한 효율적으로 쓰기 위해 정렬할 배열의 원소 중 최대값을 구해야 함
+     *
+     * <p>시간복잡도: O(n)
+     * <p>메모리 낭비가 심함(새로운 배열을 만들어야 하기 때문에)
+     *
+     * @author 김민재
+     * @param  arr 정렬할 배열
+     * @param  n   배열의 크기
+     * @return 정렬된 배열
+     * */
+    public static int[] CountingSort(int[] arr, int n) {
+        int max = Arrays.stream(arr)
+                .max()
+                .orElseThrow(NullPointerException::new);
+
+        int[] countingArray = new int[max + 1];
+        int[] result = new int[n];
+
+        for ( int i = 0; i < n; i++ )
+            countingArray[ arr[i] ] += 1;
+
+        for ( int i = 1; i < max + 1; i++ )
+            countingArray[i] += countingArray[i - 1];
+
+        for ( int i = n - 1; i >= 0; i-- )
+            result[ --countingArray[arr[i]] ] = arr[i];
+
+        return result;
     }
 
 }
