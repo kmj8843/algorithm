@@ -5,8 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static com.rlalsa8843.utils.CommonUtils.createRandomArray;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
@@ -122,20 +120,36 @@ class SortTest {
     }
 
     @Test
-    void CountingSort() {
+    void countingSort() {
         int n = 100000;
         int[] randomArray = createRandomArray(n);
 
         long st = System.currentTimeMillis();
-        Sort.CountingSort(randomArray, n);
+        Sort.countingSort(randomArray, n);
         long et = System.currentTimeMillis();
 
         System.out.println("계수 정렬 속도 측정: " + (et - st) + " ms");
 
         int[] arr = { 3, 1, 2, 6, 4, 3 };
-        int[] result = Sort.CountingSort(arr, arr.length);
-        Arrays.stream(result).forEach(System.out::print);
+        int[] result = Sort.countingSort(arr, arr.length);
 
         assertArrayEquals(new int[]{ 1, 2, 3, 3, 4, 6 }, result);
+    }
+
+    @Test
+    void mergeSort() {
+        int n = 100000;
+        int[] randomArray = createRandomArray(n);
+
+        long st = System.currentTimeMillis();
+        Sort.mergeSort(randomArray, n);
+        long et = System.currentTimeMillis();
+
+        System.out.println("계수 정렬 속도 측정: " + (et - st) + " ms");
+
+        int[] arr = { 3, 1, 2, 6, 4, 3 };
+        Sort.mergeSort(arr, arr.length);
+
+        assertArrayEquals(new int[]{ 1, 2, 3, 3, 4, 6 }, arr);
     }
 }

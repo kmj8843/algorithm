@@ -3,11 +3,16 @@ package com.rlalsa8843.utils.algorithm;
 import com.rlalsa8843.utils.CommonUtils;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class Sort {
+    // 셸 정렬에 사용 될 gap
     private final static int[] gap =
             { 1, 4, 10, 23, 57, 132, 301, 701, 1750, 3937, 8858, 19930, 44842, 100894, 227011, 510774, 1149241,
                     2585792, 5818032, 13090572, 29453787, 66271020, 149109795, 335497038, 754868335, 1698453753};
+
+    // 합병 정렬에 사용 될 변수
+    private static int[] mergeSortArray;
 
     /**
      * <p>선택 정렬(Selection Sort)
@@ -299,10 +304,10 @@ public class Sort {
      * @param  n   배열의 크기
      * @return 정렬된 배열
      * */
-    public static int[] CountingSort(int[] arr, int n) {
+    public static int[] countingSort(int[] arr, int n) {
         int max = Arrays.stream(arr)
                 .max()
-                .orElseThrow(NullPointerException::new);
+                .orElseThrow(NoSuchElementException::new);
 
         int[] countingArray = new int[max + 1];
         int[] result = new int[n];
@@ -317,6 +322,76 @@ public class Sort {
             result[ --countingArray[arr[i]] ] = arr[i];
 
         return result;
+    }
+
+    /**
+     * <p>합병 정렬(Merge Sort)
+     *
+     * <p>주어진 리스트의 크기가 1이 될때까지 반복적으로 부분 리스트를 만들어 정렬하여 합치는 방식
+     * <p>안정정렬
+     * <p>정렬 과정에서 추가적인 배열 공간을 할당하기 때문에 메모리 사용량이 많음
+     *
+     * <p>시간복작도: O(NlogN)
+     *
+     * @author 김민재
+     * @param  arr 정렬할 배열
+     * @param  n   배열의 크기
+     * */
+    public static void mergeSort(int[] arr, int n) {
+        mergeSortArray = new int[n];
+        mergeSort(arr, 0, n - 1);
+        mergeSortArray = null;
+    }
+
+    /**
+     * <p>합병 정렬에서 부분리스트를 만드는 과정(병)
+     *
+     * @author 김민재
+     * @param  arr   원본 리스트
+     * @param  left  부분리스트로 나눌 첫 번째 인덱스
+     * @param  right 부분리스트로 나눌 마지막 인덱스
+     * */
+    private static void mergeSort(int[] arr, int left, int right) {
+        if ( left == right ) return;
+
+        int mid = ( left + right ) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        merge(arr, left, mid, right);
+    }
+
+    /**
+     * <p>합병 정렬에서 부분리스트를 정렬하며 합치는 과정(합)
+     * <p>내부적으로 mergeSortArray 리스트에 arr 리스트의 left ~ right 인덱스의 정렬된 값을 담고,
+     * <p>마지막에 mergeSortArray 값을 arr 리스트에 복사 
+     * 
+     * @author 김민재
+     * @param  arr   원본 리스트
+     * @param  left  병합할 리스트의 첫 번째 인덱스
+     * @param  mid   병합할 리스트의 중간 인덱스
+     * @param  right 병합할 리스트의 마지막 인덱스
+     * */
+    private static void merge(int[] arr, int left, int mid, int right) {
+        int l = left;
+        int r = mid + 1;
+        int index = left;
+
+        while ( l <= mid && r <= right ) {
+            if ( arr[l] < arr[r] )
+                mergeSortArray[ index++ ] = arr[ l++ ];
+            else
+                mergeSortArray[ index++ ] = arr[ r++ ];
+        }
+
+        while ( l <= mid )
+            mergeSortArray[ index++ ] = arr[ l++ ];
+
+        while ( r <= right )
+            mergeSortArray[ index++ ] = arr[ r++ ];
+
+        if (right + 1 - left >= 0) System.arraycopy(mergeSortArray, left, arr, left, right + 1 - left);
+
     }
 
 }
