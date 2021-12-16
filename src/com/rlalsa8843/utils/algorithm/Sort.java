@@ -116,7 +116,7 @@ public class Sort {
         if ( left < right ) {
             int pivot = partition(arr, left, right);
 
-            quickSort(arr, left, pivot - 1);
+            quickSort(arr, left, pivot);
             quickSort(arr, pivot + 1, right);
         }
 
@@ -133,20 +133,18 @@ public class Sort {
      * @return  pivot 다음 partition 에서 분기 처리될 기준
      * */
     private static int partition(int[] arr, int left, int right) {
-        int pivot = (left + right) / 2;
-        int low = left;
-        int high = right;
+        int low = left - 1;
+        int high = right + 1;
+        int pivot = arr[(left + right) / 2];
 
-        while ( low < high ) {
-            while ( low < right && arr[low] < arr[pivot] ) low++;
-            while ( high > left && arr[high] >= arr[pivot] ) high--;
+        while (true) {
+            do low++; while (arr[low] < pivot);
+            do high--; while (arr[high] > pivot);
 
-            if ( low < high )
-                CommonUtils.swap(arr, low, high);
+            if (low >= high) return high;
+
+            CommonUtils.swap(arr, low, high);
         }
-        CommonUtils.swap(arr, left, high);
-
-        return high;
     }
 
     /**
@@ -296,7 +294,7 @@ public class Sort {
      * <p>데이터 값의 개수만큼 차례대로 정렬
      * <p>메모리를 최대한 효율적으로 쓰기 위해 정렬할 배열의 원소 중 최대값을 구해야 함
      *
-     * <p>시간복잡도: O(n)
+     * <p>시간 복잡도: O(n)
      * <p>메모리 낭비가 심함(새로운 배열을 만들어야 하기 때문에)
      *
      * @author 김민재
@@ -331,7 +329,7 @@ public class Sort {
      * <p>안정정렬
      * <p>정렬 과정에서 추가적인 배열 공간을 할당하기 때문에 메모리 사용량이 많음
      *
-     * <p>시간복작도: O(NlogN)
+     * <p>시간 복작도: O(NlogN)
      *
      * @author 김민재
      * @param  arr 정렬할 배열
@@ -392,6 +390,55 @@ public class Sort {
 
         if (right + 1 - left >= 0) System.arraycopy(mergeSortArray, left, arr, left, right + 1 - left);
 
+    }
+
+    /**
+     * <p>이진 삽입 정렬(Binary Insertion Sort)
+     *
+     * <p>삽입 정렬과 비슷한 구조로 실행되나, 원소가 들어갈 위치를 선형 탐색이 아닌 이진 탐색을 이용
+     *
+     * <p>시간 복잡도
+     * <p>최선: O(NlogN)
+     * <p>최악: O(N^2)
+     *
+     * @author 김민재
+     * @param  arr 정렬할 배열
+     * @param  n   배열의 크기
+     * */
+    public static void binaryInsertionSort(int[] arr, int n) {
+        for ( int i = 1; i < n; i++ ) {
+            int target = arr[i];
+            int j = i;
+            int index = binaryInsertion(arr, target, 0, i);
+
+            while ( j > index ) arr[j] = arr[--j];
+
+            arr[j] = target;
+        }
+    }
+
+    /**
+     * <p>삽입 정렬과 다른 부분
+     * <p>이진 탐색을 이용하여 삽입할 원소의 인덱스를 받음
+     *
+     * @author 김민재
+     * @param  arr    탐색 대상이 되는 배열
+     * @param  target 탐색할 원소
+     * @param  low    탐색할 배열의 시작 위치 
+     * @param  high   탐색할 배열의 마지막 위치
+     * @return 배열에서 탐색한 원소의 위치
+     * */
+    private static int binaryInsertion(int[] arr, int target, int low, int high) {
+        int mid;
+
+        while ( low < high ) {
+            mid = low + (high - low) / 2;
+
+            if ( target < arr[mid] ) high = mid;
+            else low = mid + 1;
+        }
+
+        return low;
     }
 
 }
